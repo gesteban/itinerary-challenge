@@ -15,4 +15,4 @@ eureka:
 spring:
   jackson:
     time-zone: UTC
-    date-format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    date-format: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
