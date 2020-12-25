@@ -26,9 +26,10 @@ spring:
         show_sql: true # todo security : set to false
         use_sql_comments: false
         format_sql: false
+  # overwriting jackson defaults to unify date serialization among services
   jackson:
     time-zone: UTC
-    date-format: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    date-format: "yyyy-MM-dd'T'HH:mm:ss'Z'"
 
 logging:
   pattern:
