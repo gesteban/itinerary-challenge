@@ -28,6 +28,7 @@ spring:
         format_sql: false
   jackson:
     time-zone: UTC
+    date-format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
 logging:
   pattern:
