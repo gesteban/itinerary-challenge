@@ -1,2 +1,5 @@
 *.pdf
 *.png
+
+.idea/
+.gradle/
