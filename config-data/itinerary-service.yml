@@ -26,6 +26,8 @@ spring:
         show_sql: true # todo security : set to false
         use_sql_comments: false
         format_sql: false
+  jackson:
+    time-zone: UTC
 
 logging:
   pattern:
