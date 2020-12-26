@@ -21,7 +21,7 @@ public class SearchServiceImpl implements SearchService {
     private ItineraryClient itineraryClient;
 
     @Override
-    public Path findByLessTime(String origin, String destination) {
+    public List<Path> findByLessTime(String origin, String destination) {
 
 
         Set<Node> nodes = calculateShortestPathFromSource(origin, destination);
@@ -33,18 +33,24 @@ public class SearchServiceImpl implements SearchService {
             System.out.println();
         });
 
+        List<Path> paths = new ArrayList<>();
+        for(Node node : nodes) {
+            List<Itinerary> itineraries = new ArrayList<>();
+            itineraries.addAll(node.getPath().stream().map(x -> x.getItinerary()).collect(Collectors.toList()));
+            itineraries.add(node.getItinerary());
+            itineraries.remove(null);
+            Path path = new Path();
+            path.setTotalDuration(node.getDistance());
+            path.setItineraries(itineraries);
+            paths.add(path);
+        }
 
-        Path path = new Path();
-        path.setName("pedro");
-//        path.setItineraries(itineraryClient.listItinerary(origin, LocalTime.now()).getBody());
-//        ArrayList<Path> list = new ArrayList<>();
-//        list.add(path);
-        return path;
+        return paths;
     }
 
     @Override
-    public Path findByLessConnections(String origin, String destination) {
-        return new Path();
+    public List<Path> findByLessConnections(String origin, String destination) {
+        return null;
     }
 
     /**
@@ -54,26 +60,27 @@ public class SearchServiceImpl implements SearchService {
      * (specified by {@link #arrivalTime}). The node also contains the path followed to the city. Since to reach
      * a city there are multiple paths, a city can be represented by one or more nodes.
      */
-    public class Node {
+    private class Node {
 
         private String name;
         private LocalTime arrivalTime;
         private Integer distance = Integer.MAX_VALUE;
         private List<Node> path = new LinkedList<>();
         private Map<Node, Integer> adjacentNodes = new HashMap<>();
+        private Itinerary itinerary;
 
-        public Node(String name, LocalTime arrivalTime) {
+        public Node(String name) {
             this.name = name;
-            this.arrivalTime = arrivalTime;
         }
 
         /**
-         * Creates a node
+         * Creates a node that represents the arrival to the destination of the given itinerary.
          * @param itinerary
          */
         public Node(Itinerary itinerary) {
             this.name = itinerary.getDestination();
             this.arrivalTime = itinerary.getArrival();
+            this.itinerary = itinerary;
         }
 
         public Integer getDistance() {
@@ -116,6 +123,14 @@ public class SearchServiceImpl implements SearchService {
             this.path = path;
         }
 
+        public Itinerary getItinerary() {
+            return itinerary;
+        }
+
+        public void setItinerary(Itinerary itinerary) {
+            this.itinerary = itinerary;
+        }
+
         @Override
         public String toString() {
             return "Node{" +
@@ -126,27 +141,18 @@ public class SearchServiceImpl implements SearchService {
         }
     }
 
-    public class Graph {
-
-        private Set<Node> nodes = new HashSet<>();
-
-        public void addNode(Node nodeA) {
-            nodes.add(nodeA);
-        }
-    }
-
     /**
      * Adaptation of Dijkstra's algorithm to search for the shortest path (in time) from two locations using
      * itinerary-service. The shortest path is calculated regardless of departure time.
      *
      * @param originName name of the origin city
      * @param destinationName name of the destination city
-     * @return a set of nodes that contains the possible path from origin city to destination city
+     * @return a set of nodes that contains the possible paths from origin city to destination city
      */
     public Set<Node> calculateShortestPathFromSource(String originName, String destinationName) {
 
         // set initial node conditions
-        Node origin = new Node(originName, null); // special null arrivalTime value for origin node
+        Node origin = new Node(originName);
         origin.setDistance(0);
 
         // init dijkstra model
@@ -176,7 +182,7 @@ public class SearchServiceImpl implements SearchService {
             // between the current city and the one represented by the node
             currentNode.setAdjacentNodes(itinerariesFromCurrentNode.stream().collect(
                     Collectors.toMap(
-                            x -> new Node(x.getDestination(), x.getArrival()),
+                            x -> new Node(x),
                             y -> {
                                 int weight = y.getDurationInMinutes().intValue();
                                 if (currentNode.getArrivalTime() != null) {
@@ -214,10 +220,10 @@ public class SearchServiceImpl implements SearchService {
         return endNodes;
     }
 
-    private static Node getLowestDistanceNode(Set<Node> unsettledNodes) {
+    private static Node getLowestDistanceNode(Set<Node> unvisitedNodes) {
         Node lowestDistanceNode = null;
         int lowestDistance = Integer.MAX_VALUE;
-        for (Node node : unsettledNodes) {
+        for (Node node : unvisitedNodes) {
             int nodeDistance = node.getDistance();
             if (nodeDistance < lowestDistance) {
                 lowestDistance = nodeDistance;

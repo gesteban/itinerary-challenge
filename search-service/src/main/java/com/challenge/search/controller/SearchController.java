@@ -19,7 +19,7 @@ public class SearchController {
     private SearchService searchService;
 
     @GetMapping
-    public ResponseEntity<Path> findByLessTime(
+    public ResponseEntity<List<Path>> findByLessTime(
             @RequestParam(name = "origin") String origin,
             @RequestParam(name = "destination") String destination) {
         return ResponseEntity.ok(searchService.findByLessTime(origin, destination));

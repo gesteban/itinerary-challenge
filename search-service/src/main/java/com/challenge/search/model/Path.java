@@ -5,25 +5,30 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Path to follow in order to go from one city to another.
+ */
 @Component
 public class Path {
 
-    private String name;
+    /**
+     * Total duration of the path among cities, included the times waiting for the next itinerary.
+     */
+    private Integer totalDuration;
+    /**
+     * List of the itineraries are part of the path.
+     */
     private List<Itinerary> itineraries;
 
     public Path() {
     }
 
-    public Path(String name) {
-        this.name = name;
+    public Integer getTotalDuration() {
+        return totalDuration;
     }
 
-    public String getName() {
-        return "pedro";
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setTotalDuration(Integer totalDuration) {
+        this.totalDuration = totalDuration;
     }
 
     public List<Itinerary> getItineraries() {
