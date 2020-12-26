@@ -12,15 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalTime;
 import java.util.List;
 
-@FeignClient(name = "itinerary-service")
-@RequestMapping(value = "/itineraries")
+@FeignClient(name = "itinerary-service", fallback = ItineraryHystrixFallbackFactory.class)
 public interface ItineraryClient {
 
-    @GetMapping
+    @GetMapping(value = "/itineraries")
     public ResponseEntity<List<Itinerary>> listItinerary(
             @RequestParam(name = "origin", required = false) String origin,
             @RequestParam(name = "departure", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime departure);
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/itineraries/{id}")
     public ResponseEntity<Itinerary> getItinerary(@PathVariable("id") Long id);
 }

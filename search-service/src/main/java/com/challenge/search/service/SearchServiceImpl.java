@@ -34,7 +34,7 @@ public class SearchServiceImpl implements SearchService {
         });
 
         List<Path> paths = new ArrayList<>();
-        for(Node node : nodes) {
+        for (Node node : nodes) {
             List<Itinerary> itineraries = new ArrayList<>();
             itineraries.addAll(node.getPath().stream().map(x -> x.getItinerary()).collect(Collectors.toList()));
             itineraries.add(node.getItinerary());
@@ -75,6 +75,7 @@ public class SearchServiceImpl implements SearchService {
 
         /**
          * Creates a node that represents the arrival to the destination of the given itinerary.
+         *
          * @param itinerary
          */
         public Node(Itinerary itinerary) {
@@ -145,7 +146,7 @@ public class SearchServiceImpl implements SearchService {
      * Adaptation of Dijkstra's algorithm to search for the shortest path (in time) from two locations using
      * itinerary-service. The shortest path is calculated regardless of departure time.
      *
-     * @param originName name of the origin city
+     * @param originName      name of the origin city
      * @param destinationName name of the destination city
      * @return a set of nodes that contains the possible paths from origin city to destination city
      */
@@ -192,7 +193,8 @@ public class SearchServiceImpl implements SearchService {
                             })));
             System.out.println("--- ADJACENT NODES OF CURRENT NODES");
             currentNode.getAdjacentNodes().forEach((x, y) -> {
-                System.out.print(x); System.out.println(" | edgeWeight=" + y);
+                System.out.print(x);
+                System.out.println(" | edgeWeight=" + y);
             });
             // loop through adjacent nodes to decide if are to be visited or not
             for (Map.Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
