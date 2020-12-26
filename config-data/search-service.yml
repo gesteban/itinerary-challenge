@@ -17,3 +17,13 @@ spring:
   jackson:
     time-zone: UTC
     date-format: "yyyy-MM-dd'T'HH:mm:ss'Z'"
+
+feign:
+  hystrix:
+    enabled: true
+
+management:
+    endpoints:
+      web:
+        exposure:
+          include: '*'
