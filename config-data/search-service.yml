@@ -22,11 +22,11 @@ feign:
   hystrix:
     enabled: true
 
-#management:
-#    endpoints:
-#      web:
-#        exposure:
-#          include: '*'
+management:
+    endpoints:
+      web:
+        exposure:
+          include: '*'
 
 hystrix:
   dashboard:
