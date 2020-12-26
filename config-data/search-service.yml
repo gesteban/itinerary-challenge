@@ -18,15 +18,15 @@ spring:
     time-zone: UTC
     date-format: "yyyy-MM-dd'T'HH:mm:ss'Z'"
 
-Feign:
+feign:
   hystrix:
     enabled: true
 
-management:
-    endpoints:
-      web:
-        exposure:
-          include: '*'
+#management:
+#    endpoints:
+#      web:
+#        exposure:
+#          include: '*'
 
 hystrix:
   dashboard:
