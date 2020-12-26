@@ -1,0 +1,5 @@
+assumptions
+
+the itineraries occur in the same time zone; data of the arrival and departure times does not takes into account time zones
+the itineraries stored are daily itineraries, they repeat day after day; services make use of simple HH:mm times to refeer to arrival and departure times
+when searching the best path between two cities, the proposed path will start and end the same day
