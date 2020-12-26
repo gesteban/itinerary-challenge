@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8099/eureka/
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: itinerary-service
+          uri: lb://itinerary-service
+          predicates:
+            - Path=/itineraries/**
+        - id: search-service
+          uri: lb://search-service
+          predicates:
+            - Path=/search/**
