@@ -34,6 +34,16 @@ Search service that consumes `itinerary-service`. This service performs searches
 
 ## Frameworks and libraries used
 
+### Spring Cloud Config
+
+Spring Cloud Config provides server-side and client-side support for externalized configuration 
+  in a distributed system. The server exposes an HTTP resource-based API for external 
+  configuration that clients consume, centralizing management of external properties for 
+  applications across all environments.
+
+This project uses Spring Cloud Config to centralize and manage configurations trough 
+  `config-service`.
+
 ### Spring Boot Actuator
 
 Actuator is mainly used to expose operational information about 
@@ -41,7 +51,9 @@ Actuator is mainly used to expose operational information about
   or JMX beans to enable us to interact with it.
 
 This component is a dependence of Hystrix and is necessary to deploy the monitoring
-  tool `admin-service`.
+  tool `admin-service`. It exposes operational information in JSON format at:
+- <http://localhost:8091/actuator> from `itinerary-service`
+- <http://localhost:8092/actuator> from `search-service`
 
 ### Eureka Server
 
