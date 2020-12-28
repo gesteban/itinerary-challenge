@@ -4,10 +4,6 @@ server:
     include-message: always # todo security : remove (default is never)
 
 spring:
-  boot:
-    admin:
-      client:
-        url: http://localhost:8086
   # enabling H2 console at http://localhost:8091/h2-console
   h2:
     console:
