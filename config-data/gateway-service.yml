@@ -4,18 +4,27 @@ server:
 spring:
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
       routes:
-        - id: itinerary-service
+        - id: itinerary-service-api
           uri: lb://itinerary-service
           predicates:
-            - Path=/itineraries/**
-        - id: search-service
+            - Path=/api/itineraries
+          filters:
+            - StripPrefix=1
+        - id: search-service-api
           uri: lb://search-service
           predicates:
-            - Path=/search/**
+            - Path=/api/search/**
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_SERVER:http://localhost:8763}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 eureka:
   client:

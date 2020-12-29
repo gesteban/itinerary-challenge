@@ -25,12 +25,12 @@ eureka:
     healthcheck:
       enabled: true
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-          - mappings
-          - env
-          - health
-          - info
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include:
+#          - mappings
+#          - env
+#          - health
+#          - info
