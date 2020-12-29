@@ -140,13 +140,27 @@ Spring Security is a framework that focuses on providing both authentication and
 
 It is used as a security component providing the following security aspects:
 
-- this
-- that
+- Authorization. Usage of `SecurityWebFilterChain` and `UserDetails` of
+  `org.springframework.security` to implement an authorization-based list of
+  roles and permissions to access api services. Sample users provided through code.
+- Authentication. Though Basic Auth was implemented as authentication method, it is
+  obviously not an adequate solution to production environments (where https/OAuth2
+  is more suitable).
 - Apart from that, CSRF is disabled to ease testing and as per [Spring Security 
   Documentation](https://docs.spring.io/autorepo/docs/spring-security/4.0.0.RELEASE/reference/html/csrf.html#when-to-use-csrf-protection)
 
-## 3 Organization details
+### 2.7 Spring Cloud Gateway
+
+
+
+## 3 Other considerations
+
+depends_on graph
 
 ![depends_on](./readme-images/depends_on.png)
 
 
+### Security considerations
+
+  
+- Hiding services: 
