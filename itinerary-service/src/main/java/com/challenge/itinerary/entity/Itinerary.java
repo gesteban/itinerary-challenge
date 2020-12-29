@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+// todo create DTO to use at the controller stage?
 @Entity
 @Table(name = "tbl_itineraries")
 public class Itinerary {

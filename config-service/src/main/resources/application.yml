@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: config-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/gesteban/itinerary-challenge.git
+          searchPaths: config-data
+#          username: ${GIT_USER}
+#          password: ${GIT_PASSWORD} # TODO remove
+  security:
+    user:
+      name: root
+      password: s3cr3t
+
+server:
+  port: 8762
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+    healthcheck:
+          enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - mappings
+          - env
+          - health
+          - info

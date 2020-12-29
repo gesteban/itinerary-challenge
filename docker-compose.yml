@@ -1,0 +1,58 @@
+version: '3'
+services:
+  registry_service:
+    image: challenge/registry:latest
+    container_name: registry-service
+    expose:
+      - 8761
+    ports:
+      - 8761:8761 # todo remove, gateway will deal with it
+  config_service:
+    image: challenge/config:latest
+    container_name: config-service
+    expose:
+      - 8762
+    ports:
+      - 8762:8762 # todo remove, gateway will deal with it
+    depends_on:
+      - registry_service
+    environment:
+      - EUREKA_SERVER=http://registry-service:8761/eureka
+  admin_service:
+    image: challenge/admin:latest
+    container_name: admin-service
+    expose:
+      - 8763
+    ports:
+      - 8763:8763 # todo remove, gateway will deal with it
+  itinerary_service:
+    image: challenge/itinerary:latest
+    container_name: itinerary-service
+    expose:
+      - 8770
+    ports:
+      - 8770:8770 # todo remove, gateway will deal with it
+    depends_on:
+      - registry_service
+      - config_service
+      - admin_service
+    environment:
+      - EUREKA_SERVER=http://registry-service:8761/eureka
+      - CONFIG_SERVER=http://config-service:8762/
+      - ADMIN_SERVER=http://admin-service:8763/
+  search_service:
+    image: challenge/search:latest
+    container_name: search-service
+    expose:
+      - 8771
+    ports:
+      - 8771:8771 # todo remove, gateway will deal with it
+    depends_on:
+      - registry_service
+      - config_service
+      - admin_service
+      - itinerary_service
+    environment:
+      - EUREKA_SERVER=http://registry-service:8761/eureka
+      - CONFIG_SERVER=http://config-service:8762/
+      - ADMIN_SERVER=http://admin-service:8763/

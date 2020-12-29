@@ -5,7 +5,15 @@ Project that aims to find the best path between two cities using an
 
 ## 1 Services included
 
-### 1.1 config-service
+### 1.1 registry-service
+
+Eureka Server. A centralized register of available microservices. Used by several 
+  components that enhance security and resilience.
+
+Uses:
+- Eureka Server
+
+### 1.2 config-service
 
 Configuration service. Provides the configuration needed by other services.
 
@@ -13,14 +21,6 @@ Configurations files are stored in `/config-data` folder.
 
 Uses:
 - Spring Cloud Config Server
-
-### 1.2 registry-service
-
-Eureka Server. A centralized register of available microservices. Used by several 
-  components that enhance security and resilience.
-
-Uses:
-- Eureka Server
 
 ### 1.3 admin-service
 
@@ -33,6 +33,12 @@ Uses:
 ### 1.4 gateway-service
 
 API routing service. Provides a unique entry point to our microservice architecture.
+
+Uses:
+- Spring Cloud Config Client
+- Eureka Client
+- Spring Security
+- Spring Cloud Gateway
 
 ### 1.5 itinerary-service
 
@@ -120,3 +126,14 @@ Used to monitor actuators endpoints in a simpler way.
 
 Spring Cloud Sleuth provides Spring Boot auto-configuration for distributed tracing.
 
+### 2.6 Spring Security
+
+Spring Security is a framework that focuses on providing both authentication and 
+  authorization to Java applications.
+
+It is used as a security component providing the following security aspects:
+
+- this
+- that
+- Apart from that, CSRF is disabled to ease testing and as per [Spring Security 
+  Documentation](https://docs.spring.io/autorepo/docs/spring-security/4.0.0.RELEASE/reference/html/csrf.html#when-to-use-csrf-protection)
