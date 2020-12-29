@@ -1,5 +1,4 @@
 *.pdf
-*.png
 
 .idea/
 .gradle/
