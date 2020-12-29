@@ -1,12 +1,5 @@
 version: '3'
 services:
-  registry_service:
-    image: challenge/registry:latest
-    container_name: registry-service
-    expose:
-      - 8761
-    ports:
-      - 8761:8761 # todo remove, gateway will deal with it
   config_service:
     image: challenge/config:latest
     container_name: config-service
@@ -14,10 +7,19 @@ services:
       - 8762
     ports:
       - 8762:8762 # todo remove, gateway will deal with it
-    depends_on:
-      - registry_service
     environment:
       - EUREKA_SERVER=http://registry-service:8761/eureka
+  registry_service:
+    image: challenge/registry:latest
+    container_name: registry-service
+    expose:
+      - 8761
+    ports:
+      - 8761:8761 # todo remove, gateway will deal with it
+    depends_on:
+      - config_service
+    environment:
+      - CONFIG_SERVER=http://config-service:8762/
   admin_service:
     image: challenge/admin:latest
     container_name: admin-service
@@ -33,12 +35,11 @@ services:
     ports:
       - 8770:8770 # todo remove, gateway will deal with it
     depends_on:
-      - registry_service
       - config_service
-      - admin_service
+      - registry_service
     environment:
-      - EUREKA_SERVER=http://registry-service:8761/eureka
       - CONFIG_SERVER=http://config-service:8762/
+      - EUREKA_SERVER=http://registry-service:8761/eureka
       - ADMIN_SERVER=http://admin-service:8763/
   search_service:
     image: challenge/search:latest
@@ -48,11 +49,22 @@ services:
     ports:
       - 8771:8771 # todo remove, gateway will deal with it
     depends_on:
-      - registry_service
       - config_service
-      - admin_service
+      - registry_service
       - itinerary_service
     environment:
-      - EUREKA_SERVER=http://registry-service:8761/eureka
       - CONFIG_SERVER=http://config-service:8762/
+      - EUREKA_SERVER=http://registry-service:8761/eureka
+      - ADMIN_SERVER=http://admin-service:8763/
+  gateway_service:
+    image: challenge/gateway:latest
+    container_name: gateway-service
+    ports:
+      - 8080:8080
+    depends_on:
+      - config_service
+      - registry_service
+    environment:
+      - CONFIG_SERVER=http://config-service:8762/
+      - EUREKA_SERVER=http://registry-service:8761/eureka
       - ADMIN_SERVER=http://admin-service:8763/
