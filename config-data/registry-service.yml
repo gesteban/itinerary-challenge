@@ -1,9 +1,13 @@
+server:
+  port: 8761
+
 spring:
   application:
     name: registry-service
-
-server:
-  port: 8761
+#  boot:
+#    admin:
+#      client:
+#        url: ${ADMIN_SERVER:http://localhost:8763}
 
 eureka:
   client:
