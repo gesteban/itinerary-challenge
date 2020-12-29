@@ -1,7 +1,14 @@
-# itinerary-challenge
-
 Project that aims to find the best path between two cities using an 
   architecture based on microservices.
+
+The project takes the following assumptions in regard to itineraries and paths:
+
+- The itineraries occur in the same time zone; data of the arrival and departure times 
+  does not take into account time zones.
+- The itineraries stored are daily itineraries, i.e. they repeat day after day; 
+  services make use of simple `HH:mm` times to refer to arrival and departure times.
+- When searching the best path between two cities, the proposed path will start and end 
+  at the same day; i.e. every path has to end before `23:59`.
 
 ## 1 Services included
 
@@ -56,8 +63,8 @@ Search service that consumes `itinerary-service`. This service performs searches
   itineraries to find the best path between two given cities. It provides two different calls:
 - `findByLessTime` provides all the paths between two cities, ordered by time expended 
   (independent of the departure time).
-- `findByLessSteps` provides all the paths between two cities, ordered by number of itineraries
-  done.
+- `findByLessSteps` provides all the paths between two cities, ordered by number of 
+  itineraries done.
 
 Uses:
 - Spring Cloud Config Client
@@ -69,10 +76,10 @@ Uses:
 
 ### 2.1 Spring Cloud Config
 
-Spring Cloud Config provides server-side and client-side support for externalized configuration 
-  in a distributed system. The server exposes an HTTP resource-based API for external 
-  configuration that clients consume, centralizing management of external properties for 
-  applications across all environments.
+Spring Cloud Config provides server-side and client-side support for externalized 
+  configuration in a distributed system. The server exposes an HTTP resource-based API 
+  for external configuration that clients consume, centralizing management of external 
+  properties for applications across all environments.
 
 This project uses Spring Cloud Config to centralize and manage configurations trough 
   `config-service`.
@@ -137,3 +144,9 @@ It is used as a security component providing the following security aspects:
 - that
 - Apart from that, CSRF is disabled to ease testing and as per [Spring Security 
   Documentation](https://docs.spring.io/autorepo/docs/spring-security/4.0.0.RELEASE/reference/html/csrf.html#when-to-use-csrf-protection)
+
+## 3 Organization details
+
+![depends_on](./readme-images/depends_on.png)
+
+
