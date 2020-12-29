@@ -1,10 +1,5 @@
 server:
-  port: 8080
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8099/eureka/
+  port: 8760
 
 spring:
   cloud:
@@ -21,3 +16,11 @@ spring:
           uri: lb://search-service
           predicates:
             - Path=/search/**
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl: 
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+    healthcheck:
+      enabled: true
