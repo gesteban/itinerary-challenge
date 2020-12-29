@@ -1,14 +1,5 @@
 Project that aims to find the best path between two cities using an 
-  architecture based on microservices.
-
-The project takes the following assumptions in regard to itineraries and paths:
-
-- The itineraries occur in the same time zone; data of the arrival and departure times 
-  does not take into account time zones.
-- The itineraries stored are daily itineraries, i.e. they repeat day after day; 
-  services make use of simple `HH:mm` times to refer to arrival and departure times.
-- When searching the best path between two cities, the proposed path will start and end 
-  at the same day; i.e. every path has to end before `23:59`.
+  architecture based on microservices using Spring Cloud and Docker.
 
 ## 1 Services included
 
@@ -155,12 +146,23 @@ It is used as a security component providing the following security aspects:
 
 ## 3 Other considerations
 
-depends_on graph
+### Assumptions
 
-![depends_on](./readme-images/depends_on.png)
+The project takes the following assumptions in regard to itineraries and paths:
 
+- The itineraries occur in the same time zone; data of the arrival and departure times
+  does not take into account time zones.
+- The itineraries stored are daily itineraries, i.e. they repeat day after day;
+  services make use of simple `HH:mm` times to refer to arrival and departure times.
+- When searching the best path between two cities, the proposed path will start and end
+  at the same day; i.e. every path has to end before `23:59`.
 
 ### Security considerations
 
+- Gateway. Assuming we are not managing internal threats, Spring Cloud Gateway acts as an
+  entry point to all our external calls. This centralizes and eases security configuration
+  within our microservices ecosystem.
   
-- Hiding services: 
+- Hiding services. Using docker-compose configuration we can disable port visibility 
+  outside of docker environment. This allows us to expose internal microservices ports 
+  to keep application running without making them available to the world.
