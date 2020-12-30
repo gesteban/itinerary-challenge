@@ -22,17 +22,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Path> findByLessTime(String origin, String destination) {
-
-
-        Set<Node> nodes = calculateShortestPathFromSource(origin, destination);
-        System.out.println("--- RESULT");
-        nodes.stream().forEach(x -> {
-            System.out.println(x);
-            System.out.print("  ");
-            x.getPath().stream().forEach(System.out::print);
-            System.out.println();
-        });
-
+        List<Node> nodes = calculateShortestPathInTime(origin, destination);
         List<Path> paths = new ArrayList<>();
         for (Node node : nodes) {
             List<Itinerary> itineraries = new ArrayList<>();
@@ -44,13 +34,24 @@ public class SearchServiceImpl implements SearchService {
             path.setItineraries(itineraries);
             paths.add(path);
         }
-
         return paths;
     }
 
     @Override
     public List<Path> findByLessConnections(String origin, String destination) {
-        return null;
+        List<Node> nodes = calculateShortestPathInConnections(origin, destination);
+        List<Path> paths = new ArrayList<>();
+        for (Node node : nodes) {
+            List<Itinerary> itineraries = new ArrayList<>();
+            itineraries.addAll(node.getPath().stream().map(x -> x.getItinerary()).collect(Collectors.toList()));
+            itineraries.add(node.getItinerary());
+            itineraries.remove(null);
+            Path path = new Path();
+            path.setTotalDuration(node.getDistance());
+            path.setItineraries(itineraries);
+            paths.add(path);
+        }
+        return paths;
     }
 
     /**
@@ -60,7 +61,7 @@ public class SearchServiceImpl implements SearchService {
      * (specified by {@link #arrivalTime}). The node also contains the path followed to the city. Since to reach
      * a city there are multiple paths, a city can be represented by one or more nodes.
      */
-    private class Node {
+    private class Node implements Comparable<Node> {
 
         private String name;
         private LocalTime arrivalTime;
@@ -140,6 +141,11 @@ public class SearchServiceImpl implements SearchService {
                     ", arrivalTime=" + arrivalTime +
                     '}';
         }
+
+        @Override
+        public int compareTo(Node o) {
+            return getDistance().compareTo(o.getDistance());
+        }
     }
 
     /**
@@ -150,7 +156,7 @@ public class SearchServiceImpl implements SearchService {
      * @param destinationName name of the destination city
      * @return a set of nodes that contains the possible paths from origin city to destination city
      */
-    public Set<Node> calculateShortestPathFromSource(String originName, String destinationName) {
+    public List<Node> calculateShortestPathInTime(String originName, String destinationName) {
 
         // set initial node conditions
         Node origin = new Node(originName);
@@ -219,7 +225,85 @@ public class SearchServiceImpl implements SearchService {
             System.out.println("--- END NODES");
             endNodes.stream().forEach(System.out::println);
         }
-        return endNodes;
+        System.out.println("--- RESULT");
+        endNodes.stream().forEach(x -> {
+            System.out.println(x);
+            System.out.print("  ");
+            x.getPath().stream().forEach(System.out::print);
+            System.out.println();
+        });
+        return endNodes.stream().sorted().collect(Collectors.toList());
+    }
+
+    public List<Node> calculateShortestPathInConnections(String originName, String destinationName) {
+
+        // set initial node conditions
+        Node origin = new Node(originName);
+        origin.setDistance(0);
+
+        // init dijkstra model
+        Set<Node> visitedNodes = new HashSet<>();
+        Set<Node> unvisitedNodes = new HashSet<>();
+        Set<Node> endNodes = new HashSet<>();
+        unvisitedNodes.add(origin);
+
+        while (unvisitedNodes.size() != 0) {
+            // select node and open it
+            Node currentNode = getLowestDistanceNode(unvisitedNodes);
+            unvisitedNodes.remove(currentNode);
+            System.out.println("--- START LOOP");
+            System.out.println("--- CURRENT NODE = " + currentNode);
+            currentNode.getPath().stream().forEach(System.out::println);
+            // retrieve itineraries from current node
+            ResponseEntity<List<Itinerary>> response = itineraryClient.listItinerary(
+                    currentNode.getName(), currentNode.getArrivalTime());
+            // filling itinerary list in case HttpStatus returned is 204 NO CONTENT
+            List<Itinerary> itinerariesFromCurrentNode = new ArrayList<>();
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                itinerariesFromCurrentNode = response.getBody();
+            }
+            System.out.println("--- ITINERARIES FROM CURRENT NODE");
+            itinerariesFromCurrentNode.stream().forEach(System.out::println);
+            // calculate adjacent nodes, each node contains the proposed next city and the weight of the edge
+            // between the current city and the one represented by the node
+            currentNode.setAdjacentNodes(itinerariesFromCurrentNode.stream().collect(
+                    Collectors.toMap( x -> new Node(x), y -> 1)));
+            System.out.println("--- ADJACENT NODES OF CURRENT NODES");
+            currentNode.getAdjacentNodes().forEach((x, y) -> {
+                System.out.print(x);
+                System.out.println(" | edgeWeight=" + y);
+            });
+            // loop through adjacent nodes to decide if are to be visited or not
+            for (Map.Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
+                Node adjacentNode = adjacencyPair.getKey();
+                Integer edgeWeight = adjacencyPair.getValue();
+                // if adjacent node city is already visited in the path of the current node, ignore it
+                if (!currentNode.getPath().stream().anyMatch(x -> x.getName().equals(adjacentNode.getName()))) {
+                    calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
+                    // if adjacent node is destination, add to the end nodes instead of the unvisited nodes
+                    if (adjacentNode.getName().equals(destinationName)) {
+                        endNodes.add(adjacentNode);
+                    } else {
+                        unvisitedNodes.add(adjacentNode);
+                    }
+                }
+            }
+            visitedNodes.add(currentNode);
+            System.out.println("--- VISITED NODES");
+            visitedNodes.stream().forEach(System.out::println);
+            System.out.println("--- UNVISITED NODES");
+            unvisitedNodes.stream().forEach(System.out::println);
+            System.out.println("--- END NODES");
+            endNodes.stream().forEach(System.out::println);
+        }
+        System.out.println("--- RESULT");
+        endNodes.stream().forEach(x -> {
+            System.out.println(x);
+            System.out.print("  ");
+            x.getPath().stream().forEach(System.out::print);
+            System.out.println();
+        });
+        return endNodes.stream().sorted().collect(Collectors.toList());
     }
 
     private static Node getLowestDistanceNode(Set<Node> unvisitedNodes) {

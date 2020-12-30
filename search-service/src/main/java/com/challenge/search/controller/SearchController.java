@@ -18,11 +18,19 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
-    @GetMapping
+    @GetMapping(value = "/byLessTime")
     public ResponseEntity<List<Path>> findByLessTime(
             @RequestParam(name = "origin") String origin,
             @RequestParam(name = "destination") String destination) {
         return ResponseEntity.ok(searchService.findByLessTime(origin, destination));
     }
+
+    @GetMapping(value = "/byLessConnections")
+    public ResponseEntity<List<Path>> findByLessConnections(
+            @RequestParam(name = "origin") String origin,
+            @RequestParam(name = "destination") String destination) {
+        return ResponseEntity.ok(searchService.findByLessConnections(origin, destination));
+    }
+
 
 }
