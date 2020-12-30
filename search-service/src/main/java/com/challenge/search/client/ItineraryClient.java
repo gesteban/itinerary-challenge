@@ -14,11 +14,9 @@ import java.util.List;
 @FeignClient(name = "itinerary-service", fallback = ItineraryHystrixFallbackFactory.class)
 public interface ItineraryClient {
 
-    @GetMapping(value = "/itineraries")
+    @GetMapping(value = "/list")
     public ResponseEntity<List<Itinerary>> listItinerary(
             @RequestParam(name = "origin", required = false) String origin,
             @RequestParam(name = "departure", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime departure);
 
-    @GetMapping(value = "/itineraries/{id}")
-    public ResponseEntity<Itinerary> getItinerary(@PathVariable("id") Long id);
 }

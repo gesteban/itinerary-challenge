@@ -4,7 +4,10 @@ import com.challenge.itinerary.entity.Itinerary;
 import com.challenge.itinerary.service.ItineraryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ExampleProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -18,13 +21,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/itineraries")
+@RequestMapping(value = "/")
 public class ItineraryController {
 
     @Autowired
     private ItineraryService itineraryService;
 
-    @GetMapping
+    @GetMapping(value = "/list")
     public ResponseEntity<List<Itinerary>> listItinerary(
             @RequestParam(name = "origin", required = false)
             @ApiParam(value = "name of the origin city, e.g. city-A") String origin,
@@ -46,7 +49,7 @@ public class ItineraryController {
         return ResponseEntity.ok(itineraries);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/item/{id}")
     public ResponseEntity<Itinerary> getItinerary(@PathVariable("id") Long id) {
         Itinerary product = itineraryService.getItinerary(id);
         if (product == null) {
@@ -55,7 +58,7 @@ public class ItineraryController {
         return ResponseEntity.ok(product);
     }
 
-    @PostMapping(consumes = {"application/json"})
+    @PostMapping(value = "/item", consumes = {"application/json"})
     public ResponseEntity<Itinerary> createItinerary(@Valid @RequestBody Itinerary itinerary, BindingResult result) {
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, formatMessage(result));
@@ -64,7 +67,7 @@ public class ItineraryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(itineraryCreated);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/item/{id}")
     public ResponseEntity<Itinerary> updateItinerary(@PathVariable("id") Long id, @RequestBody Itinerary itinerary) {
         itinerary.setId(id);
         Itinerary itineraryDB = itineraryService.updateItinerary(itinerary);
@@ -74,7 +77,7 @@ public class ItineraryController {
         return ResponseEntity.ok(itineraryDB);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/item/{id}")
     public ResponseEntity<Itinerary> deleteItinerary(@PathVariable("id") Long id) {
         Itinerary itineraryDeleted = itineraryService.deleteItinerary(id);
         if (itineraryDeleted == null) {

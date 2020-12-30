@@ -26,9 +26,4 @@ public class ItineraryHystrixFallbackFactory implements ItineraryClient {
         return ResponseEntity.ok(itineraries);
     }
 
-    @Override
-    public ResponseEntity<Itinerary> getItinerary(Long id) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
 }
