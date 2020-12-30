@@ -4,10 +4,7 @@ import com.challenge.itinerary.entity.Itinerary;
 import com.challenge.itinerary.service.ItineraryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ExampleProperty;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -28,11 +25,14 @@ public class ItineraryController {
     private ItineraryService itineraryService;
 
     @GetMapping(value = "/list")
+    @ApiOperation(
+            value = "${swagger.descriptions.list.value}",
+            notes = "${swagger.descriptions.list.notes}")
     public ResponseEntity<List<Itinerary>> listItinerary(
             @RequestParam(name = "origin", required = false)
-            @ApiParam(value = "name of the origin city, e.g. city-A") String origin,
+            @ApiParam(value = "${swagger.descriptions.origin.value}") String origin,
             @RequestParam(name = "departure", required = false) @DateTimeFormat(pattern = "HH:mm")
-            @ApiParam(value = "maximum time of departure, e.g. 10:00") Date departure) {
+            @ApiParam(value = "${swagger.descriptions.departure.value}") Date departure) {
         List<Itinerary> itineraries = new ArrayList<>();
         if (origin == null && departure == null) {
             itineraries = itineraryService.listAllItinerary();
@@ -50,6 +50,7 @@ public class ItineraryController {
     }
 
     @GetMapping(value = "/item/{id}")
+    @ApiOperation(value = "${swagger.descriptions.item-get.value}")
     public ResponseEntity<Itinerary> getItinerary(@PathVariable("id") Long id) {
         Itinerary product = itineraryService.getItinerary(id);
         if (product == null) {
@@ -59,6 +60,9 @@ public class ItineraryController {
     }
 
     @PostMapping(value = "/item", consumes = {"application/json"})
+    @ApiOperation(
+            value = "${swagger.descriptions.item-post.value}",
+            notes = "${swagger.descriptions.item-post.notes}")
     public ResponseEntity<Itinerary> createItinerary(@Valid @RequestBody Itinerary itinerary, BindingResult result) {
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, formatMessage(result));
@@ -68,6 +72,7 @@ public class ItineraryController {
     }
 
     @PutMapping(value = "/item/{id}")
+    @ApiOperation(value = "${swagger.descriptions.item-put.value}")
     public ResponseEntity<Itinerary> updateItinerary(@PathVariable("id") Long id, @RequestBody Itinerary itinerary) {
         itinerary.setId(id);
         Itinerary itineraryDB = itineraryService.updateItinerary(itinerary);
@@ -78,6 +83,7 @@ public class ItineraryController {
     }
 
     @DeleteMapping(value = "/item/{id}")
+    @ApiOperation(value = "${swagger.descriptions.item-delete.value}")
     public ResponseEntity<Itinerary> deleteItinerary(@PathVariable("id") Long id) {
         Itinerary itineraryDeleted = itineraryService.deleteItinerary(id);
         if (itineraryDeleted == null) {

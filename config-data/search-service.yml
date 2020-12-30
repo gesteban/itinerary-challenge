@@ -34,3 +34,12 @@ feign:
 hystrix:
   dashboard:
     proxyStreamAllowList: '*'
+
+swagger:
+  descriptions:
+    byLessTime:
+      value: "find paths between two cities ordered by less time spent since departure"
+      notes: "example -> destination = 'city_C' and origin = 'city_A'"
+    byLessConnections:
+      value: "find paths between two cities ordered by less steps done"
+      notes: "example -> destination = 'city_C' and origin = 'city_A'"

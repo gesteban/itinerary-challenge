@@ -48,3 +48,24 @@ management:
     web:
       exposure:
         include: '*'
+
+swagger:
+  descriptions:
+    origin:
+      value: "example -> 'city_A'"
+    departure:
+      value: "example -> '10:00'"
+    list:
+      value: "list the itineraries, using parameters as filters"
+      notes: "itineraries may be filtered by departure time or origin city;
+                      filters can be used together or individually;
+                      if no filter is used, return all the itineraries"
+    item-post:
+      value: "add an itinerary"
+      notes: "WARNING! post requests should not include 'id', 'createdAt' and 'status' attributes"
+    item-get:
+      value: "get an itinerary"
+    item-put:
+      value: "update an itinerary"
+    item-delete:
+      value: "delete an itinerary"
