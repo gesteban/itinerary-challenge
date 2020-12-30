@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 
 import static com.challenge.gateway.security.ApplicationUserPermission.*;
 import static com.challenge.gateway.security.ApplicationUserRole.ROLE_API_ADMIN;
@@ -57,6 +60,14 @@ public class ApplicationSecurityConfig {
                 .build();
 
         return new MapReactiveUserDetailsService(user, admin);
+    }
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.challenge"))
+                .build();
     }
 
 

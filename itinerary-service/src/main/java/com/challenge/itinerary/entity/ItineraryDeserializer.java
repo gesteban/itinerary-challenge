@@ -1,4 +1,4 @@
-package com.challenge.search.model;
+package com.challenge.itinerary.entity;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 public class ItineraryDeserializer extends StdDeserializer<Itinerary> {
 
@@ -27,12 +29,21 @@ public class ItineraryDeserializer extends StdDeserializer<Itinerary> {
         itinerary.setId(node.get("id").asLong());
         itinerary.setOrigin(node.get("origin").asText());
         itinerary.setDestination(node.get("destination").asText());
-        itinerary.setDeparture(LocalTime.parse(node.get("departure").asText()));
-        itinerary.setArrival(LocalTime.parse(node.get("arrival").asText()));
+        // alternative to SimpleDateFormat conversion
+//        LocalTime localTime = LocalTime.parse(node.get("departure").asText());
+//        Instant instant = localTime.atDate(LocalDate.MIN).atZone(ZoneId.systemDefault()).toInstant();
+//        Date date = Date.from(instant);
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        try {
+            itinerary.setDeparture(formatter.parse(node.get("departure").asText()));
+            itinerary.setArrival(formatter.parse(node.get("arrival").asText()));
+        } catch (ParseException ex) {
+            throw new IOException(ex);
+        }
         itinerary.setDuration(Duration.parse(node.get("duration").asText()));
         itinerary.setDurationInMinutes(node.get("durationInMinutes").asLong());
         itinerary.setStatus(node.get("status").asText());
-        itinerary.setCreateAt(ZonedDateTime.parse(node.get("createAt").asText()));
+        itinerary.setCreateAt(Date.from(ZonedDateTime.parse(node.get("createAt").asText()).toInstant()));
         return itinerary;
     }
 }

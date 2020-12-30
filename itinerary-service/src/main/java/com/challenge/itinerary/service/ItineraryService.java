@@ -2,7 +2,6 @@ package com.challenge.itinerary.service;
 
 import com.challenge.itinerary.entity.Itinerary;
 
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -21,5 +20,7 @@ public interface ItineraryService {
     public List<Itinerary> findByOrigin(String origin);
 
     public List<Itinerary> findByOriginAndDepartureGreaterThan(String origin, Date departure);
+
+    public List<Itinerary> findByDepartureGreaterThan(Date departure);
 
 }

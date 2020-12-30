@@ -1,6 +1,7 @@
 package com.challenge.itinerary.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -8,7 +9,6 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-// todo create DTO to use at the controller stage?
 @Entity
 @Table(name = "tbl_itineraries")
 public class Itinerary {
@@ -16,17 +16,27 @@ public class Itinerary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ApiModelProperty(example = "city-A")
     private String origin;
+    @ApiModelProperty(example = "city-C")
     private String destination;
+    @ApiModelProperty(dataType = "java.lang.String", example = "16:35")
     @Temporal(TemporalType.TIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm")
     private Date departure;
+    @ApiModelProperty(dataType = "java.lang.String", example = "17:05")
     @Temporal(TemporalType.TIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm")
     private Date arrival;
+    @ApiModelProperty(dataType = "java.lang.String", example = "PT30M")
     @Transient
     private Duration duration;
+    @ApiModelProperty(example = "30")
     @Transient
     private Long durationInMinutes;
+    @ApiModelProperty(example = "CREATED")
     private String status;
+    @ApiModelProperty(example = "2020-12-30T15:08:16.135Z")
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;

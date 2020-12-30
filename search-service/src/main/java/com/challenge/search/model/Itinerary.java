@@ -15,9 +15,9 @@ public class Itinerary implements Comparable<Itinerary> {
     private String origin;
     @ApiModelProperty(example = "city-C")
     private String destination;
-    @ApiModelProperty(dataType = "java.lang.String", example = "16:35:00")
+    @ApiModelProperty(dataType = "java.lang.String", example = "16:35")
     private LocalTime departure;
-    @ApiModelProperty(dataType = "java.lang.String", example = "17:05:00")
+    @ApiModelProperty(dataType = "java.lang.String", example = "17:05")
     private LocalTime arrival;
     @ApiModelProperty(dataType = "java.lang.String", example = "PT30M")
     private Duration duration;

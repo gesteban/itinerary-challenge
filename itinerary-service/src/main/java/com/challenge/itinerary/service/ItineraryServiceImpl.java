@@ -69,4 +69,10 @@ public class ItineraryServiceImpl implements ItineraryService {
     public List<Itinerary> findByOriginAndDepartureGreaterThan(String origin, Date departure) {
         return itineraryRepository.findByOriginAndDepartureGreaterThan(origin, departure);
     }
+
+    @Override
+    public List<Itinerary> findByDepartureGreaterThan(Date departure) {
+        return itineraryRepository.findByDepartureGreaterThan(departure);
+    }
+
 }

@@ -5,13 +5,25 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: itinerary-service-api
+        - id: itinerary-swagger
+          uri: lb://itinerary-service
+          predicates:
+            - Path=/api/itineraries/v2/api-docs**
+          filters:
+            - StripPrefix=2
+        - id: itinerary-service
           uri: lb://itinerary-service
           predicates:
             - Path=/api/itineraries
           filters:
             - StripPrefix=1
-        - id: search-service-api
+        - id: search-swagger
+          uri: lb://search-service
+          predicates:
+            - Path=/api/search/v2/api-docs**
+          filters:
+            - StripPrefix=2
+        - id: search-service
           uri: lb://search-service
           predicates:
             - Path=/api/search/**
