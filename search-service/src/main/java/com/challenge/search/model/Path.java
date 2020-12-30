@@ -1,5 +1,6 @@
 package com.challenge.search.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class Path {
     /**
      * Total duration of the path among cities, included the times waiting for the next itinerary.
      */
+    @ApiModelProperty(example = "30")
     private Integer totalDuration;
     /**
      * List of the itineraries are part of the path.

@@ -1,8 +1,8 @@
 package com.challenge.search.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.swagger.annotations.ApiModelProperty;
 
-import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -11,12 +11,19 @@ import java.time.ZonedDateTime;
 public class Itinerary implements Comparable<Itinerary> {
 
     private Long id;
+    @ApiModelProperty(example = "city-A")
     private String origin;
+    @ApiModelProperty(example = "city-C")
     private String destination;
+    @ApiModelProperty(dataType = "java.lang.String", example = "16:35:00")
     private LocalTime departure;
+    @ApiModelProperty(dataType = "java.lang.String", example = "17:05:00")
     private LocalTime arrival;
+    @ApiModelProperty(dataType = "java.lang.String", example = "PT30M")
     private Duration duration;
+    @ApiModelProperty(example = "30")
     private Long durationInMinutes;
+    @ApiModelProperty(example = "CREATED")
     private String status;
     private ZonedDateTime createAt;
 
