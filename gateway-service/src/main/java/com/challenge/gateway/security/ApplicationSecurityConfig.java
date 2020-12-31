@@ -35,13 +35,15 @@ public class ApplicationSecurityConfig {
                 .csrf().disable()
                 // .requestCache().requestCache(NoOpServerRequestCache.getInstance()).and() // setting stateless mode
                 .authorizeExchange()
-                // set api permission
+                // open swagger endpoints to smooth swagger-ui load
+                .pathMatchers("/api/search/v2/api-docs", "/api/itineraries/v2/api-docs").permitAll()
+                // set api permissions
                 .pathMatchers(HttpMethod.GET, "/api/search/**").hasAuthority(PERMISSION_SEARCH_READ.getName())
                 .pathMatchers(HttpMethod.GET, "/api/itineraries/**").hasAuthority(PERMISSION_ITINERARIES_READ.getName())
                 .pathMatchers(HttpMethod.POST, "/api/itineraries/**").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
                 .pathMatchers(HttpMethod.DELETE, "/api/itineraries/**").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
                 .pathMatchers(HttpMethod.PUT, "/api/itineraries/**").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
-                // permit rest of urls to audit
+                // open rest of urls to audit
                 .pathMatchers("/**").permitAll()
                 // set basic auth
                 .and().httpBasic();
