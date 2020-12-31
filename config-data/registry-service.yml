@@ -7,7 +7,7 @@ spring:
 #  boot:
 #    admin:
 #      client:
-#        url: ${ADMIN_SERVER:http://localhost:8763}
+#        url: ${ADMIN_SERVER:http://localhost:8763} # todo uncomment?
 
 eureka:
   client:

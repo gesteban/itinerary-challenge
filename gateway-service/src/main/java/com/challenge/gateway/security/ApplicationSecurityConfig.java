@@ -30,15 +30,20 @@ public class ApplicationSecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-
-        http.csrf().disable()
+        http
+                // disable csrf for testing
+                .csrf().disable()
+                // .requestCache().requestCache(NoOpServerRequestCache.getInstance()).and() // setting stateless mode
                 .authorizeExchange()
-                .pathMatchers(HttpMethod.GET, "/api/search").hasAuthority(PERMISSION_SEARCH_READ.getName())
-                .pathMatchers(HttpMethod.GET, "/api/itineraries").hasAuthority(PERMISSION_ITINERARIES_READ.getName())
-                .pathMatchers(HttpMethod.POST, "/api/itineraries").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
-                .pathMatchers(HttpMethod.DELETE, "/api/itineraries").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
-                .pathMatchers(HttpMethod.PUT, "/api/itineraries").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
+                // set api permission
+                .pathMatchers(HttpMethod.GET, "/api/search/**").hasAuthority(PERMISSION_SEARCH_READ.getName())
+                .pathMatchers(HttpMethod.GET, "/api/itineraries/**").hasAuthority(PERMISSION_ITINERARIES_READ.getName())
+                .pathMatchers(HttpMethod.POST, "/api/itineraries/**").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
+                .pathMatchers(HttpMethod.DELETE, "/api/itineraries/**").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
+                .pathMatchers(HttpMethod.PUT, "/api/itineraries/**").hasAuthority(PERMISSION_ITINERARIES_WRITE.getName())
+                // permit rest of urls to audit
                 .pathMatchers("/**").permitAll()
+                // set basic auth
                 .and().httpBasic();
 
         return http.build();
@@ -46,19 +51,16 @@ public class ApplicationSecurityConfig {
 
     @Bean
     public MapReactiveUserDetailsService userDetailsService() {
-
         UserDetails user = User.builder()
                 .username("user")
                 .password(passwordEncoder.encode("1234"))
                 .authorities(ROLE_API_CONSUMER.getGrantedAuthorities())
                 .build();
-
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("1234"))
                 .authorities(ROLE_API_ADMIN.getGrantedAuthorities())
                 .build();
-
         return new MapReactiveUserDetailsService(user, admin);
     }
 

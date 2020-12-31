@@ -7,7 +7,7 @@ spring:
   # enabling H2 console at http://localhost:8091/h2-console
   h2:
     console:
-      enabled: true
+      enabled: true # todo security : remove
   # database
   datasource:
     url: jdbc:h2:mem:productDB;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -30,10 +30,6 @@ spring:
   jackson:
     time-zone: UTC
     date-format: "yyyy-MM-dd'T'HH:mm:ss'Z'"
-
-logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
 
 eureka:
   client:
