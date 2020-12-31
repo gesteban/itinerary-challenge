@@ -56,6 +56,21 @@ services:
       - CONFIG_SERVER=http://config-service:8762/
       - EUREKA_SERVER=http://registry-service:8761/eureka
       - ADMIN_SERVER=http://admin-service:8763/
+  search_service_2:
+    image: challenge/search:latest
+    container_name: search-service-2
+    expose:
+      - 8771
+    #ports:
+    #  - 8771:8771 # todo remove, gateway will deal with it
+    depends_on:
+      - config_service
+      - registry_service
+      - itinerary_service
+    environment:
+      - CONFIG_SERVER=http://config-service:8762/
+      - EUREKA_SERVER=http://registry-service:8761/eureka
+      - ADMIN_SERVER=http://admin-service:8763/
   gateway_service:
     image: challenge/gateway:latest
     container_name: gateway-service
