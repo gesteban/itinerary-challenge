@@ -5,6 +5,9 @@ import com.challenge.search.exceptions.PathfinderException;
 import com.challenge.search.pathfinder.PathfinderFactory;
 import com.challenge.search.pathfinder.Strategy;
 
+/**
+ * Factory for Dijkstra-based implementations of pathfinder strategies.
+ */
 public class DijkstraPathfinderFactory extends PathfinderFactory {
 
     @Override

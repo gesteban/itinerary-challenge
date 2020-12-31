@@ -5,6 +5,10 @@ import com.challenge.search.model.Path;
 
 import java.util.List;
 
+/**
+ * Abstract class representing a pathfinder problem resolution using {@link com.challenge.search.model.Itinerary}
+ * class as edges.
+ */
 public abstract class Pathfinder {
 
     public ItineraryClient itineraryClient;

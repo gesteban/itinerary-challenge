@@ -6,6 +6,13 @@ import com.challenge.search.pathfinder.Strategy;
 
 import java.util.List;
 
+/**
+ * Dijkstra-based shortest path strategy implementation of pathfinder problem for itineraries.
+ * <br/>
+ * This implementation takes into account the weights of the edges and the duration of the itineraries to order
+ * the possible paths. The first element returned by {@link #getPaths} is the fastest path (in time) between
+ * given nodes.
+ */
 public class DijkstraFastestPathfinder extends DijkstraPathfinder {
 
     private Strategy strategy;

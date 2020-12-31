@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Modification of Dijkstra's node that represents the arrival to the destination of the given itinerary.
+ * <br/>
+ * It is used in a similar way than the original algorithm, but contains extra useful information to
+ * consolidate the results in a itinerary list.
+ */
 public class Node implements Comparable<Node> {
 
     private String name;
@@ -23,7 +29,7 @@ public class Node implements Comparable<Node> {
     }
 
     /**
-     * Creates a node that represents the arrival to the destination of the given itinerary.
+     * Creates a node that .
      *
      * @param itinerary
      */

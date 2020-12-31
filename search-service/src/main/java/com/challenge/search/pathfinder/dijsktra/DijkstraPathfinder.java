@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
+/**
+ * Base class for Dijkstra-based implementations of pathfinder strategies.
+ */
 public abstract class DijkstraPathfinder extends Pathfinder {
 
     Logger logger = LoggerFactory.getLogger(DijkstraFastestPathfinder.class);
