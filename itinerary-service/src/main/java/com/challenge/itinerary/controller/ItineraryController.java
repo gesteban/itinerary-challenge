@@ -1,10 +1,10 @@
 package com.challenge.itinerary.controller;
 
 import com.challenge.itinerary.entity.Itinerary;
+import com.challenge.itinerary.exceptions.ErrorMessage;
 import com.challenge.itinerary.service.ItineraryService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.xml.bind.DataBindingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/")
@@ -63,9 +65,10 @@ public class ItineraryController {
     @ApiOperation(
             value = "${swagger.descriptions.item-post.value}",
             notes = "${swagger.descriptions.item-post.notes}")
-    public ResponseEntity<Itinerary> createItinerary(@Valid @RequestBody Itinerary itinerary, BindingResult result) {
+    public ResponseEntity<Itinerary> createItinerary(@Valid @RequestBody Itinerary itinerary,
+                                                     BindingResult result) throws Exception {
         if (result.hasErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, formatMessage(result));
+            throw new DataBindingException(ErrorMessage.formatMessage(result), null);
         }
         Itinerary itineraryCreated = itineraryService.createItinerary(itinerary);
         return ResponseEntity.status(HttpStatus.CREATED).body(itineraryCreated);
@@ -73,7 +76,11 @@ public class ItineraryController {
 
     @PutMapping(value = "/item/{id}")
     @ApiOperation(value = "${swagger.descriptions.item-put.value}")
-    public ResponseEntity<Itinerary> updateItinerary(@PathVariable("id") Long id, @RequestBody Itinerary itinerary) {
+    public ResponseEntity<Itinerary> updateItinerary(@PathVariable("id") Long id, @RequestBody Itinerary itinerary,
+                                                     BindingResult result) throws Exception {
+        if (result.hasErrors()) {
+            throw new DataBindingException(ErrorMessage.formatMessage(result), null);
+        }
         itinerary.setId(id);
         Itinerary itineraryDB = itineraryService.updateItinerary(itinerary);
         if (itineraryDB == null) {
@@ -92,22 +99,5 @@ public class ItineraryController {
         return ResponseEntity.ok(itineraryDeleted);
     }
 
-    private static String formatMessage(BindingResult result) {
-        List<Map<String, String>> errors = result.getFieldErrors().stream()
-                .map(err -> {
-                    Map<String, String> error = new HashMap<>();
-                    error.put(err.getField(), err.getDefaultMessage());
-                    return error;
-                }).collect(Collectors.toList());
-        ErrorMessage errorMessage = new ErrorMessage("01", errors);
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = "";
-        try {
-            jsonString = mapper.writeValueAsString(errorMessage);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return jsonString;
-    }
 
 }
