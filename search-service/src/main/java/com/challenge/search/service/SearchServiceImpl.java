@@ -3,6 +3,8 @@ package com.challenge.search.service;
 import com.challenge.search.client.ItineraryClient;
 import com.challenge.search.model.Itinerary;
 import com.challenge.search.model.Path;
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 
 @Service
 public class SearchServiceImpl implements SearchService {
+
+    private Logger logger = LoggerFactory.getLogger(SearchService.class);
 
     @Autowired
     private ItineraryClient itineraryClient;
@@ -172,9 +176,9 @@ public class SearchServiceImpl implements SearchService {
             // select node and open it
             Node currentNode = getLowestDistanceNode(unvisitedNodes);
             unvisitedNodes.remove(currentNode);
-            System.out.println("--- START LOOP");
-            System.out.println("--- CURRENT NODE = " + currentNode);
-            currentNode.getPath().stream().forEach(System.out::println);
+            logger.debug("--- START LOOP");
+            logger.debug("--- CURRENT NODE = " + currentNode);
+            currentNode.getPath().stream().forEach(x -> logger.debug(x.toString()));
             // retrieve itineraries from current node
             ResponseEntity<List<Itinerary>> response = itineraryClient.listItinerary(
                     currentNode.getName(), currentNode.getArrivalTime());
@@ -183,7 +187,7 @@ public class SearchServiceImpl implements SearchService {
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 itinerariesFromCurrentNode = response.getBody();
             }
-            System.out.println("--- ITINERARIES FROM CURRENT NODE");
+            logger.debug("--- ITINERARIES FROM CURRENT NODE");
             itinerariesFromCurrentNode.stream().forEach(System.out::println);
             // calculate adjacent nodes, each node contains the proposed next city and the weight of the edge
             // between the current city and the one represented by the node
@@ -197,10 +201,9 @@ public class SearchServiceImpl implements SearchService {
                                 }
                                 return weight;
                             })));
-            System.out.println("--- ADJACENT NODES OF CURRENT NODES");
+            logger.debug("--- ADJACENT NODES OF CURRENT NODES");
             currentNode.getAdjacentNodes().forEach((x, y) -> {
-                System.out.print(x);
-                System.out.println(" | edgeWeight=" + y);
+                logger.debug(x + " | edgeWeight=" + y);
             });
             // loop through adjacent nodes to decide if are to be visited or not
             for (Map.Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
@@ -218,19 +221,16 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
             visitedNodes.add(currentNode);
-            System.out.println("--- VISITED NODES");
+            logger.debug("--- VISITED NODES");
             visitedNodes.stream().forEach(System.out::println);
-            System.out.println("--- UNVISITED NODES");
+            logger.debug("--- UNVISITED NODES");
             unvisitedNodes.stream().forEach(System.out::println);
-            System.out.println("--- END NODES");
+            logger.debug("--- END NODES");
             endNodes.stream().forEach(System.out::println);
         }
-        System.out.println("--- RESULT");
+        logger.debug("--- RESULT");
         endNodes.stream().forEach(x -> {
-            System.out.println(x);
-            System.out.print("  ");
-            x.getPath().stream().forEach(System.out::print);
-            System.out.println();
+            logger.debug(x.toString() + " > "+ x.getPath().stream().map(y -> y.toString()).collect(Collectors.joining(">")));
         });
         return endNodes.stream().sorted().collect(Collectors.toList());
     }
