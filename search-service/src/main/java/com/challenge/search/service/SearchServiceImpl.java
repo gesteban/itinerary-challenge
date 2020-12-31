@@ -3,8 +3,8 @@ package com.challenge.search.service;
 import com.challenge.search.client.ItineraryClient;
 import com.challenge.search.model.Itinerary;
 import com.challenge.search.model.Path;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 @Service
 public class SearchServiceImpl implements SearchService {
 
-    private Logger logger = LoggerFactory.getLogger(SearchService.class);
+    Logger logger = LoggerFactory.getLogger(SearchService.class);
 
     @Autowired
     private ItineraryClient itineraryClient;
@@ -150,6 +150,11 @@ public class SearchServiceImpl implements SearchService {
         public int compareTo(Node o) {
             return getDistance().compareTo(o.getDistance());
         }
+
+        public String pathToString() {
+            return getPath().stream().map(x -> x.toString()).collect(Collectors.joining(" > "));
+        }
+
     }
 
     /**
@@ -172,14 +177,16 @@ public class SearchServiceImpl implements SearchService {
         Set<Node> endNodes = new HashSet<>();
         unvisitedNodes.add(origin);
 
+        int i = 1;
         while (unvisitedNodes.size() != 0) {
             // select node and open it
             Node currentNode = getLowestDistanceNode(unvisitedNodes);
             unvisitedNodes.remove(currentNode);
-            logger.debug("--- START LOOP");
-            logger.debug("--- CURRENT NODE = " + currentNode);
-            currentNode.getPath().stream().forEach(x -> logger.debug(x.toString()));
+            logger.debug(String.format("LOOP[%02d] Current node: %s", i, currentNode));
+            logger.debug(String.format("LOOP[%02d] Current path: [ %s ]", i, currentNode.pathToString()));
             // retrieve itineraries from current node
+            logger.debug(String.format("LOOP[%02d] Fetching itineraries from '%s' departing after %s", i,
+                    currentNode.getName(), currentNode.getArrivalTime()));
             ResponseEntity<List<Itinerary>> response = itineraryClient.listItinerary(
                     currentNode.getName(), currentNode.getArrivalTime());
             // filling itinerary list in case HttpStatus returned is 204 NO CONTENT
@@ -187,10 +194,12 @@ public class SearchServiceImpl implements SearchService {
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 itinerariesFromCurrentNode = response.getBody();
             }
-            logger.debug("--- ITINERARIES FROM CURRENT NODE");
-            itinerariesFromCurrentNode.stream().forEach(System.out::println);
+            logger.debug(String.format("LOOP[%02d] Itineraries retrieved: [ %s ]", i,
+                    itinerariesFromCurrentNode.stream().map(x -> x.getId().toString())
+                            .collect(Collectors.joining(", "))));
             // calculate adjacent nodes, each node contains the proposed next city and the weight of the edge
             // between the current city and the one represented by the node
+            logger.debug(String.format("LOOP[%02d] Transforming itineraries to adjacent nodes", i));
             currentNode.setAdjacentNodes(itinerariesFromCurrentNode.stream().collect(
                     Collectors.toMap(
                             x -> new Node(x),
@@ -201,11 +210,17 @@ public class SearchServiceImpl implements SearchService {
                                 }
                                 return weight;
                             })));
-            logger.debug("--- ADJACENT NODES OF CURRENT NODES");
-            currentNode.getAdjacentNodes().forEach((x, y) -> {
-                logger.debug(x + " | edgeWeight=" + y);
-            });
+            logger.debug(String.format("LOOP[%02d] Adjacent nodes: [ %s ]", i,
+                    currentNode.getAdjacentNodes().entrySet().stream().map(
+                            x -> new StringBuilder()
+                                    .append("{id=")
+                                    .append(x.getKey().getItinerary().getId())
+                                    .append(", weight=")
+                                    .append(x.getValue())
+                                    .append("}")
+                    ).collect(Collectors.joining(", "))));
             // loop through adjacent nodes to decide if are to be visited or not
+            logger.debug(String.format("LOOP[%02d] Moving adjacent nodes to visited/unvisited nodes", i));
             for (Map.Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
                 Node adjacentNode = adjacencyPair.getKey();
                 Integer edgeWeight = adjacencyPair.getValue();
@@ -221,17 +236,14 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
             visitedNodes.add(currentNode);
-            logger.debug("--- VISITED NODES");
-            visitedNodes.stream().forEach(System.out::println);
-            logger.debug("--- UNVISITED NODES");
-            unvisitedNodes.stream().forEach(System.out::println);
-            logger.debug("--- END NODES");
-            endNodes.stream().forEach(System.out::println);
+            logger.debug(String.format("LOOP[%02d] Visited nodes: [ %s ]", i,
+                    visitedNodes.stream().map(x -> x.toString()).collect(Collectors.joining(", "))));
+            logger.debug(String.format("LOOP[%02d] Unvisited nodes: [ %s ]", i,
+                    unvisitedNodes.stream().map(x -> x.toString()).collect(Collectors.joining(", "))));
+            logger.debug(String.format("LOOP[%02d] End nodes: [ %s ]", i,
+                    endNodes.stream().map(x -> x.toString()).collect(Collectors.joining(", "))));
+            i++;
         }
-        logger.debug("--- RESULT");
-        endNodes.stream().forEach(x -> {
-            logger.debug(x.toString() + " > "+ x.getPath().stream().map(y -> y.toString()).collect(Collectors.joining(">")));
-        });
         return endNodes.stream().sorted().collect(Collectors.toList());
     }
 
