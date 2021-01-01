@@ -28,6 +28,7 @@ management:
       exposure:
         include: '*'
 
+# eureka client
 eureka:
   client:
     registerWithEureka: true

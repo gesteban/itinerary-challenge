@@ -1,7 +1,5 @@
 server:
   port: 8771
-  error:
-    include-message: always # todo security : remove (default is never)
 
 spring:
   # overwriting jackson defaults to unify date serialization among services
@@ -14,6 +12,7 @@ logging:
     com:
       challenge: DEBUG
 
+# eureka client
 eureka:
   client:
     registerWithEureka: true
@@ -28,14 +27,15 @@ management:
         exposure:
           include: '*'
 
+# hystrix
 feign:
   hystrix:
     enabled: true
-
 hystrix:
   dashboard:
     proxyStreamAllowList: '*'
 
+#swagger
 swagger:
   descriptions:
     byLessTime:

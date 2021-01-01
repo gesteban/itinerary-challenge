@@ -1,4 +1,4 @@
-package com.challenge.search.service.impl;
+package com.challenge.search.service;
 
 import com.challenge.search.client.ItineraryClient;
 import com.challenge.search.model.Path;

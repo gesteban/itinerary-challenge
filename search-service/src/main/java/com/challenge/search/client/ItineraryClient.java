@@ -5,13 +5,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalTime;
 import java.util.List;
 
-@FeignClient(name = "itinerary-service", fallback = ItineraryHystrixFallbackFactory.class)
+@FeignClient(name = "itinerary-service", fallback = ItineraryHystrixFallback.class)
 public interface ItineraryClient {
 
     @GetMapping(value = "/list")

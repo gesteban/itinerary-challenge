@@ -1,6 +1,5 @@
 package com.challenge.search.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.time.Duration;
@@ -10,7 +9,6 @@ import java.time.ZonedDateTime;
 /**
  * Represents a movement from two cities.
  */
-@JsonDeserialize(using = ItineraryDeserializer.class)
 public class Itinerary implements Comparable<Itinerary> {
 
     private Long id;

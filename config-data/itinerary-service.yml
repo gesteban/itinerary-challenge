@@ -1,13 +1,11 @@
 server:
   port: 8770
-  error:
-    include-message: always # todo security : remove (default is never)
 
 spring:
-  # enabling H2 console at http://localhost:8091/h2-console
+  # h2 console at http://localhost:8091/h2-console
   h2:
     console:
-      enabled: true # todo security : remove
+      enabled: false
   # database
   datasource:
     url: jdbc:h2:mem:productDB;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -17,13 +15,13 @@ spring:
     password:
   # jpa/hibernate
   jpa:
-    show-sql: true # todo security : set to false
+    show-sql: false
     hibernate:
       ddl-auto: update # todo security : change or remove
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
-        show_sql: true # todo security : set to false
+        show_sql: false
         use_sql_comments: false
         format_sql: false
   # overwriting jackson defaults to unify date serialization among services
@@ -31,6 +29,7 @@ spring:
     time-zone: UTC
     date-format: "yyyy-MM-dd'T'HH:mm:ss'Z'"
 
+# eureka client
 eureka:
   client:
     registerWithEureka: true
@@ -45,6 +44,7 @@ management:
       exposure:
         include: '*'
 
+# swagger descriptions
 swagger:
   descriptions:
     origin:
