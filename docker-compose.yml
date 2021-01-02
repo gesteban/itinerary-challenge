@@ -20,6 +20,7 @@ services:
       - config_service
     environment:
       - CONFIG_SERVER=http://config-service:8762/
+      - ADMIN_SERVER=http://admin-service:8763/
   admin_service:
     image: challenge/admin:latest
     container_name: admin-service

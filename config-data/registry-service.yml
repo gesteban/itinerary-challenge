@@ -1,11 +1,11 @@
 server:
   port: 8761
 
-#spring:
-#  boot:
-#    admin:
-#      client:
-#        url: ${ADMIN_SERVER:http://localhost:8763} # todo uncomment?
+spring:
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_SERVER:http://localhost:8763}
 
 eureka:
   client:
