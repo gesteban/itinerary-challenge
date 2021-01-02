@@ -29,7 +29,7 @@ spring:
         registration:
           gateway:
             provider: uaa
-            client-id: gateway-service
+            client-id: gateway
             client-secret: secret
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
