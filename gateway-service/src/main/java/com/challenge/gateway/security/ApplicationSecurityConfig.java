@@ -18,20 +18,23 @@ import static com.challenge.gateway.security.ApplicationUserPermission.*;
 import static com.challenge.gateway.security.ApplicationUserRole.ROLE_API_ADMIN;
 import static com.challenge.gateway.security.ApplicationUserRole.ROLE_API_CONSUMER;
 
-@EnableWebFluxSecurity
+//@EnableWebFluxSecurity
 public class ApplicationSecurityConfig {
+/*
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+//    @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Bean
+//    @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-                // disable csrf for testing
+                */
+/*//*
+/ disable csrf for testing
                 .csrf().disable()
                 // .requestCache().requestCache(NoOpServerRequestCache.getInstance()).and() // setting stateless mode
                 .authorizeExchange()
@@ -46,12 +49,13 @@ public class ApplicationSecurityConfig {
                 // open rest of urls to audit
                 .pathMatchers("/**").permitAll()
                 // set basic auth
-                .and().httpBasic();
+                .and().httpBasic();*//*
 
+                .csrf().disable().authorizeExchange().pathMatchers("/**").permitAll();
         return http.build();
     }
 
-    @Bean
+//    @Bean
     public MapReactiveUserDetailsService userDetailsService() {
         UserDetails user = User.builder()
                 .username("user")
@@ -66,13 +70,14 @@ public class ApplicationSecurityConfig {
         return new MapReactiveUserDetailsService(user, admin);
     }
 
-    @Bean
+//    @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.challenge"))
                 .build();
     }
+*/
 
 
 }

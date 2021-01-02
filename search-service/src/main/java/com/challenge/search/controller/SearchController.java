@@ -5,6 +5,8 @@ import com.challenge.search.service.SearchService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +36,7 @@ public class SearchController {
             value = "${swagger.descriptions.byLessConnections.value}",
             notes = "${swagger.descriptions.byLessConnections.notes}")
     public ResponseEntity<List<Path>> findByLessConnections(
+            @AuthenticationPrincipal Jwt jwt,
             @RequestParam(name = "origin") String origin,
             @RequestParam(name = "destination") String destination) {
         return ResponseEntity.ok(searchService.findByLessConnections(origin, destination));

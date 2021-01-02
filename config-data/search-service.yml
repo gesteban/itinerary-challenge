@@ -6,6 +6,16 @@ spring:
   jackson:
     time-zone: UTC
     date-format: "yyyy-MM-dd'T'HH:mm:ss'Z'"
+  # authorization server
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${UAA_SERVER:http://localhost:8090}/uaa/token_keys
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_SERVER:http://localhost:8763}
 
 logging:
   level:

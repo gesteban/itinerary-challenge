@@ -17,10 +17,30 @@ spring:
             - Path=/api/search/**
           filters:
             - StripPrefix=2
+            - TokenRelay=
+            - RemoveRequestHeader=Cookie
   boot:
     admin:
       client:
         url: ${ADMIN_SERVER:http://localhost:8763}
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: uaa
+            client-id: gateway-service
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid,profile,email,resource.read
+        provider:
+          uaa:
+            authorization-uri: ${UAA_SERVER:http://localhost:8090}/uaa/oauth/authorize
+            token-uri: ${UAA_SERVER:http://localhost:8090}/uaa/oauth/token
+            user-info-uri: ${UAA_SERVER:http://localhost:8090}/uaa/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: ${UAA_SERVER:http://localhost:8090}/uaa/token_keys
 
 management:
   endpoints:
