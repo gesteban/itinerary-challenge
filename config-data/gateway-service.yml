@@ -38,7 +38,7 @@ spring:
             scope: openid,profile,email,resource.read
         provider:
           uaa:
-            authorization-uri: ${UAA_SERVER:http://localhost:8090}/uaa/oauth/authorize
+            authorization-uri: http://localhost:8090/uaa/oauth/authorize
             token-uri: ${UAA_SERVER:http://localhost:8090}/uaa/oauth/token
             user-info-uri: ${UAA_SERVER:http://localhost:8090}/uaa/userinfo
             user-name-attribute: sub
