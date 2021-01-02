@@ -9,7 +9,9 @@ Eureka Server. A centralized register of available microservices. Used by severa
   components that enhance security and resilience.
 
 Uses:
-- Eureka Server
+- Spring Cloud Netflix Eureka Server
+- Spring Cloud Config Client
+- Spring Boot Admin Client
 
 ### 1.2 config-service
 
@@ -19,6 +21,7 @@ Configurations files are stored in `/config-data` folder.
 
 Uses:
 - Spring Cloud Config Server
+- Spring Cloud Netflix Eureka Client
 
 ### 1.3 admin-service
 
