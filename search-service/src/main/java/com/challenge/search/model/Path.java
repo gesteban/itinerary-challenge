@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Path.
+ * <br/>
  * Path to follow in order to go from one city to another. It is composed by multiple itineraries.
  */
 @Component

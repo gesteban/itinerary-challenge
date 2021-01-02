@@ -4,6 +4,9 @@ import com.challenge.search.model.Path;
 
 import java.util.List;
 
+/**
+ * Search service interface.
+ */
 public interface SearchService {
 
     public List<Path> findByLessTime(String origin, String destination);

@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Search service implementation.
+ */
 @Service
 public class SearchServiceImpl implements SearchService {
 

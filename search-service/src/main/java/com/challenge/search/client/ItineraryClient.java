@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * Feign client of itinerary service.
+ */
 @FeignClient(name = "itinerary-service", fallback = ItineraryHystrixFallback.class)
 public interface ItineraryClient {
 

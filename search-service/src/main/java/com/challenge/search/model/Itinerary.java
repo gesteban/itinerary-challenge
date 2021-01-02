@@ -7,6 +7,8 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
 /**
+ * Itinerary.
+ * <br/>
  * Represents a movement from two cities.
  */
 public class Itinerary implements Comparable<Itinerary> {

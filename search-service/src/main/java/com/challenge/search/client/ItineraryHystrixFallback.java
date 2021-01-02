@@ -1,7 +1,6 @@
 package com.challenge.search.client;
 
 import com.challenge.search.model.Itinerary;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +8,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Itinerary client Hystrix fallback.
+ * <br/>
+ * Defines the default response Hystrix is going to provide in case the itinerary service is
+ * not available or the circuit is open.
+ */
 @Component
 public class ItineraryHystrixFallback implements ItineraryClient {
 

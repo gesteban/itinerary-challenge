@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * RestController for search service calls.
+ * <br/>
+ * Defines the rest interface exposed, including the usage of JWT and some swagger descriptions.
+ */
 @RestController
 @RequestMapping(value = "/")
 public class SearchController {
@@ -26,6 +31,7 @@ public class SearchController {
             value = "${swagger.descriptions.byLessTime.value}",
             notes = "${swagger.descriptions.byLessTime.notes}")
     public ResponseEntity<List<Path>> findByLessTime(
+            @AuthenticationPrincipal Jwt jwt,
             @RequestParam(name = "origin") String origin,
             @RequestParam(name = "destination") String destination) {
         return ResponseEntity.ok(searchService.findByLessTime(origin, destination));
