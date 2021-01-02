@@ -11,6 +11,8 @@ spring:
             - Path=/api/itineraries/**
           filters:
             - StripPrefix=2
+            - TokenRelay=
+            - RemoveRequestHeader=Cookie
         - id: search-service
           uri: lb://search-service
           predicates:
