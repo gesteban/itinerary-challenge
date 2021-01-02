@@ -32,7 +32,7 @@ spring:
             client-id: gateway-service
             client-secret: secret
             authorization-grant-type: authorization_code
-            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope: openid,profile,email,resource.read
         provider:
           uaa:
