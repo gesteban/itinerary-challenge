@@ -84,13 +84,13 @@ Once logged, there are two API to be used (we can change between them using an i
 - `/api/search/`. Main API of the application. Provides a searching feature to look for
   different kinds of paths using the itineraries retrieved from `/api/itinerary/`.
 
-Swagger UI defines some examples to be used that returns some results, but feel free
+Swagger UI defines some examples to be used that return some results, but feel free
   to try some other inputs. The database is initially loaded using
   [data.sql](https://github.com/gesteban/itinerary-challenge/blob/master/itinerary-service/src/main/resources/data.sql),
   this data can be modified before building the project or altered in running time using
   the CRUD operations of the `/api/itinerary/` service.
 
-There is also deployed a Spring Admin Server at <http://localhost:8763/applications>, 
+There is also a Spring Admin Server deployed at <http://localhost:8763/applications>, 
   which we can use to check the status of our microservices.
 
 ## 2 Services included
@@ -109,7 +109,7 @@ Uses:
 ### 2.2 config-service
 
 Configuration service. Provides the configuration needed by other services.
-  Configurations files are stored in `/config-data` folder.
+  Configuration files are stored in `/config-data` folder.
 
 Uses:
 - Spring Cloud Config Server
@@ -184,7 +184,7 @@ Spring Cloud Config provides server-side and client-side support for externalize
   for external configuration that clients consume, centralizing management of external 
   properties for applications across all environments.
 
-This project uses Spring Cloud Config to centralize and manage configurations trough 
+This project uses Spring Cloud Config to centralize and manage configurations through 
   `config-service`.
 
 ### 3.2 Spring Boot Actuator
@@ -211,17 +211,17 @@ Spring Cloud Netflix is used to enable the following patterns in this applicatio
 Also known as Discovery Server, Eureka is a lookup server. All the microservices in the
   cluster register themselves to this server.
 
-It is used as dependency to provide circuit breaker pattern (through Hystrix) and 
+It is used as dependency to provide a circuit breaker pattern (through Hystrix) and a
   client side load balancing pattern (through Ribbon).
 
 [comment]: <> (Eureka also provides information about registered instances at <http://localhost:8099/>.)
 
 #### 3.3.2 Hystrix
 
-Enhances resilience of distributed systems providing circuit breaker pattern, monitoring
+Enhances resilience of distributed systems providing a circuit breaker pattern, monitoring
   calls between microservices to prevent cascading failures.
 
-Hystrix is used as security component as it automatically opens circuit when reached a 
+Hystrix is used as a security component as it automatically opens the circuit when reached a 
   threshold.
 
 [comment]: <> (Status can be checked through [Hystrix Monitor]&#40;http://localhost:8092/hystrix/monitor?stream=http%3A%2F%2Flocalhost%3A8092%2Factuator%2Fhystrix.stream%20&#41;.)
@@ -230,25 +230,25 @@ Hystrix is used as security component as it automatically opens circuit when rea
 
 Ribbon provides Eureka clients with client-side load balancing algorithms.
   It integrates with Eureka to discover services within a dynamic environment, deciding
-  with service has to be called each time.
+  which service has to be called each time.
 
 Ribbon is used together with Eureka to provide client-side load balancing to the
-  microservice architecture, allowing effectively to launch several instances of 
-  various services or detect downed services.
+  microservice architecture, allowing the effective launch of several instances of 
+  various services, or the detection of downed services.
 
 ### 3.4 Spring Boot Admin
 
 Web application used for managing and monitoring Spring Boot applications. Each 
   application is considered as a client and registers to the admin server.
 
-Used to monitor actuators endpoints in a simpler way.
+Used to monitor actuators endpoints in a simple way.
 
 ### 3.5 Spring Cloud Security & UAA
 
 Spring Cloud Security is a framework that focuses on providing both authentication
   and authorization to Spring applications.
 
-It provides all the necessary components to allow users identify themselves using
+It provides all the necessary components to allow users to identify themselves using
 OAuth 2.0, Javascript Object Signing & Encryption (JOSE) and JSON Web Tokens (JWT)
 standards.
 
@@ -259,7 +259,7 @@ Authorization is managed using `SecurityWebFilterChain` to provide an
 Authentication is managed by UAA, which provides authentication against its internal 
   user account database.
 
-Apart from that, CSRF is disabled to ease testing as per 
+Furthermore, CSRF is disabled to ease testing as per 
   [Spring Security Documentation](https://docs.spring.io/autorepo/docs/spring-security/4.0.0.RELEASE/reference/html/csrf.html#when-to-use-csrf-protection).
 
 ### 3.6 Spring Cloud Gateway
@@ -269,17 +269,17 @@ Spring Cloud Gateway is the component to be used as main entry point for Spring
 It provides a simple way to route to APIs, enhance security, exposes metrics, and 
 improves resiliency.
 
-In this application we are assuming we are not managing internal threats, thus Spring 
+In this application we are assuming that we are not managing internal threats, thus Spring 
   Cloud Gateway acts as an entry point to all our external calls. This centralizes and 
 eases security configuration within our microservices ecosystem.
 
-In works together with Spring Cloud Security and Docker to enhance 
+It works together with Spring Cloud Security and Docker to enhance 
   security by hiding services. Using docker-compose configuration we can disable 
-  port visibility outside of docker environment. This allows us to expose internal 
-  microservices ports to keep application running without making them available to 
+  port visibility outside the docker environment. This allows us to expose internal 
+  microservices ports to keep the application running without making them available to 
   the world.
 
-Is also works with Spring Cloud Netflix to redirects requests to the best matching 
+Is also works with Spring Cloud Netflix to redirect requests to the best matching 
   microservice instance.
 
 Finally, it provides a centralized Swagger UI that exposes documentation of all hosted 
@@ -290,7 +290,7 @@ Finally, it provides a centralized Swagger UI that exposes documentation of all 
 Spring Data JPA provides all the components necessary to implement JPA based repositories.
 
 It is used as main mean to access data inside H2 in-memory database. 
-  When application is launched, 
+  When the application is launched, 
   [data.sql](https://github.com/gesteban/itinerary-challenge/blob/master/itinerary-service/src/main/resources/data.sql)
   is loaded into H2. This initial set of itineraries can be modified using the CRUD 
   operations of `itinerary-service`.
@@ -302,7 +302,7 @@ A simple explanation of how it works can be found in
   The following section provides a more detailed explanation of the same concepts.
 
 Once the microservices start, they will try to reach `config-service` to get their 
-  configurations. The `config-service` fetch these 
+  configurations. The `config-service` fetches these 
   [configuration files](https://github.com/gesteban/itinerary-challenge/tree/master/config-data)
   from this Github repository. Microservices will repeatedly try to access the 
   `config-service`, not starting normally until they have its defined configuration
@@ -317,23 +317,23 @@ When configuration is loaded, microservices will start normally and start connec
   and updates it periodically.
 
 Some services also register themselves to `admin-service`, allowing this last 
-  microservice to consume their `/actuator` (endpoints that contains useful 
+  microservice to consume their `/actuator` (endpoints that contain useful 
   information about the service) to provide a simple interface to query metrics 
   of deployed services.
 
-The `gateway-service` is used as entry point for the application. Once a request reach
+The `gateway-service` is used as entry point for the application. Once a request reaches
   this gateway, it checks if the request is authenticated. If it isn't, it redirects
   the user to the `uaa` service, where the user will use its account there to authorize
-  our application and authenticate. Once user is authorized and authenticated the request
+  our application and authenticate. Once the user is authorized and authenticated the request
   is routed to the correct service instance using Ribbon load balancer.
 
-Once a valid request reach `search-service`, the designed algorithm will be used to 
-  retrieve the fastest or shortest path between two cities. While this call its executed, 
-  `search-service` will make requests to `itinerary-service` when needs its data. The
+Once a valid request reaches `search-service`, the designed algorithm will be used to 
+  retrieve the fastest or shortest path between two cities. While this call is executed, 
+  `search-service` will make requests to `itinerary-service` when its data is needed. The
   search algorithm is designed to minimize the number of calls to `itinerary-service`.
 
 The search algorithm is based on the [Dijkstra pathfinder algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm). 
-  The Dijkstra solution is been modified to allow graph construction in real time and to
+  The Dijkstra solution has been modified to allow graph construction in real time and to
   take into account several weighting in the node opening decision (i.e. duration of 
   itinerary and waiting time between itineraries). It is also modified to allow static 
   weighting of edges (to search the shortest paths in number of connections).
@@ -344,7 +344,7 @@ The modifications of the Dijkstra algorithm were added as a unique implementatio
   different approaches.
   Each implementation can also resolve the problem using different pathfinder strategies, 
   the application defines two strategies: FASTEST and SHORTEST.
-  More implementation and strategies could be added easily, allowing pathfinder problem to 
+  More implementation and strategies could be added easily, allowing the pathfinder problem to 
   be solved using different approaches.
   The described logic was designed using abstract factory and template patterns.
 
@@ -354,14 +354,14 @@ The modifications of the Dijkstra algorithm were added as a unique implementatio
 
 ### Assumptions
 
-The project takes the following assumptions in regard to itineraries and paths:
+The project takes the following assumptions in relation to itineraries and paths:
 
 - The itineraries occur in the same time zone; data of the arrival and departure times
   does not take into account time zones.
 - The itineraries stored are daily itineraries, i.e. they repeat day after day;
   services make use of simple `HH:mm` times to refer to arrival and departure times.
 - When searching the best path between two cities, the proposed path will start and end
-  at the same day; i.e. every path has to end before `23:59`.
+  in the same day; i.e. every path has to end before `23:59`.
 
 ### TODO
 
@@ -370,7 +370,7 @@ The project takes the following assumptions in regard to itineraries and paths:
 - Add more testing: Hystrix, more complex paths, inputs, Ribbon...
 - Create and use DTOs instead of expose entities.
 - Dockerfile to build docker images (instead of rely upon Gradle).
-- Configure gateway-service to allow admin-service consume its actuator. Now it's 
+- Configure gateway-service to allow admin-service to consume its actuator. Now it's 
   behind OAuth2 authentication and is always shown as down.
 - Expose Admin, Hystrix and Eureka monitors securely using gateway-service.
 - Refine UAA Oauth2 permissions for the application.
