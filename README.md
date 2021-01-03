@@ -16,7 +16,7 @@ The usage of this application requires Java and Docker.
 ### 1.1 Build it
 
 We can skip this section directly running the script
-  [buildIt.sh](https://github.com/gesteban/itinerary-challenge/buildIt.sh), continuing
+  [buildIt.sh](https://github.com/gesteban/itinerary-challenge/blob/master/buildIt.sh), continuing
   with the _1.2 Launch it_ section.
 
 First we have to build the application, running the Gradle tasks to clean and assemble.
