@@ -3,6 +3,7 @@ package com.challenge.gateway.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -14,8 +15,9 @@ public class ApplicationSecurityConfig {
 
         http
                 .csrf().disable()
+                .requestCache().requestCache(NoOpServerRequestCache.getInstance()).and() // setting stateless mode
                 .authorizeExchange()
-                    .pathMatchers("/v2/api-docs/")
+                    .pathMatchers("/api/itinerary/v2/api-docs/")
                         .permitAll()
                     .and()
                 .authorizeExchange()
